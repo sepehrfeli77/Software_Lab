@@ -52,17 +52,17 @@ public class RectangleTest {
             rectangle.setWidth(width);
         });
 
-        String widthRealMessage = "Width should be positive!";
+        String widthExpectedMessage = "Width should be positive!";
         String widthGotMessage = widthException.getMessage();
-        assertEquals(widthRealMessage, widthGotMessage);
+        assertEquals(widthExpectedMessage, widthGotMessage);
 
         int height = -14;
         Exception heightException = assertThrows(IllegalArgumentException.class, () -> {
             rectangle.setHeight(height);
         });
 
-        String heightRealMessage = "Height should be positive!";
+        String heightExpectedMessage = "Height should be positive!";
         String heightGotMessage = heightException.getMessage();
-        assertEquals(heightRealMessage, heightGotMessage);
+        assertEquals(heightExpectedMessage, heightGotMessage);
     }
 }
