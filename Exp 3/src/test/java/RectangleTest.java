@@ -31,4 +31,38 @@ public class RectangleTest {
         assertEquals(expectedMessage, gotMessage);
     }
 
+    @Test
+    public void setAndGetPositiveWidthAndHeight() {
+        Rectangle rectangle = new Rectangle(2, 5);
+
+        int width = 20;
+        rectangle.setWidth(width);
+        assertEquals(rectangle.getWidth(), width);
+
+        int height = 50;
+        rectangle.setHeight(height);
+        assertEquals(rectangle.getHeight(), height);
+    }
+
+    @Test
+    public void setNonPositiveWidthOrHeight() {
+        Rectangle rectangle = new Rectangle(2, 5);
+        int width = -12;
+        Exception widthException = assertThrows(IllegalArgumentException.class, () -> {
+            rectangle.setWidth(width);
+        });
+
+        String widthRealMessage = "Width should be positive!";
+        String widthGotMessage = widthException.getMessage();
+        assertEquals(widthRealMessage, widthGotMessage);
+
+        int height = -14;
+        Exception heightException = assertThrows(IllegalArgumentException.class, () -> {
+            rectangle.setHeight(height);
+        });
+
+        String heightRealMessage = "Height should be positive!";
+        String heightGotMessage = heightException.getMessage();
+        assertEquals(heightRealMessage, heightGotMessage);
+    }
 }
