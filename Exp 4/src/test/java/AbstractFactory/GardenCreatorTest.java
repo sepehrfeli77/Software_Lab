@@ -1,15 +1,22 @@
 package AbstractFactory;
 
+import AbstractFactory.Flowers.IranianFlower;
+import AbstractFactory.Flowers.JapaneseFlower;
+import AbstractFactory.GardenCreators.IranianGardenBuilder;
+import AbstractFactory.GardenCreators.JapaneseGardenBuilder;
+import AbstractFactory.Trees.IranianTree;
+import AbstractFactory.Trees.JapaneseTree;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 public class GardenCreatorTest {
     @Test
     public void IranianGardenWithIranianTreesAndFlowers(){
         IranianGardenBuilder iranianGardenBuilder = new IranianGardenBuilder();
         String expectedFlowerMessage = "Iranian flower created";
-        String expectedTreeMessage = "Iranian Tree created";
+        String expectedTreeMessage = "Iranian tree created";
 
         IranianFlower iranianFlower = (IranianFlower) iranianGardenBuilder.createFlower();
         String realFlowerMessage = iranianFlower.getMessage();
@@ -40,7 +47,7 @@ public class GardenCreatorTest {
     public void JapaneseGardenWithJapaneseTreesAndFlowers(){
         JapaneseGardenBuilder japaneseGardenBuilder = new JapaneseGardenBuilder();
         String expectedFlowerMessage = "Japanese flower created";
-        String expectedTreeMessage = "Japanese Tree created";
+        String expectedTreeMessage = "Japanese tree created";
 
         JapaneseFlower japaneseFlower = (JapaneseFlower) japaneseGardenBuilder.createFlower();
         String realFlowerMessage = japaneseFlower.getMessage();
