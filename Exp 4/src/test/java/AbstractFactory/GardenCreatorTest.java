@@ -2,76 +2,95 @@ package AbstractFactory;
 
 import AbstractFactory.Flowers.IranianFlower;
 import AbstractFactory.Flowers.JapaneseFlower;
-import AbstractFactory.GardenCreators.IranianGardenBuilder;
-import AbstractFactory.GardenCreators.JapaneseGardenBuilder;
+import AbstractFactory.GardenCreators.IranianGardenCreator;
+import AbstractFactory.GardenCreators.JapaneseGardenCreator;
 import AbstractFactory.Trees.IranianTree;
 import AbstractFactory.Trees.JapaneseTree;
 import org.junit.Test;
+import java.lang.ClassCastException;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
 
 public class GardenCreatorTest {
     @Test
     public void IranianGardenWithIranianTreesAndFlowers(){
-        IranianGardenBuilder iranianGardenBuilder = new IranianGardenBuilder();
-        String expectedFlowerMessage = "Iranian flower created";
-        String expectedTreeMessage = "Iranian tree created";
+        IranianGardenCreator iranianGardenBuilder = new IranianGardenCreator();
 
         IranianFlower iranianFlower = (IranianFlower) iranianGardenBuilder.createFlower();
-        String realFlowerMessage = iranianFlower.getMessage();
-
         IranianTree iranianTree = (IranianTree) iranianGardenBuilder.createTree();
-        String realTreeMessage = iranianTree.getMessage();
 
-        assertEquals(realFlowerMessage, expectedFlowerMessage);
-        assertEquals(realTreeMessage, expectedTreeMessage);
+        assertEquals("Iranian flower created", iranianFlower.createFlowerResult());
+        assertEquals( "Iranian tree created", iranianTree.createTreeResult());
+
+        System.out.println("First test: pass");
     }
 
     @Test
     public void IranianGardenWithJapaneseTrees(){
-        IranianGardenBuilder iranianGardenBuilder = new IranianGardenBuilder();
-        assertThrows(ClassCastException.class, () -> {
+        IranianGardenCreator iranianGardenBuilder = new IranianGardenCreator();
+        try{
             JapaneseTree japaneseTree = (JapaneseTree) iranianGardenBuilder.createTree();
-        });
+        } catch (ClassCastException e){
+            System.out.println("Japanese trees can't be created by an iranian garden creator");
+            return;
+        }catch (Exception e){
+
+        }
+        System.out.println("Second test: fail");
     }
 
     @Test
     public void IranianGardenWithJapaneseFlowers(){
-        IranianGardenBuilder iranianGardenBuilder = new IranianGardenBuilder();
-        assertThrows(ClassCastException.class, () -> {
+        IranianGardenCreator iranianGardenBuilder = new IranianGardenCreator();
+        try{
             JapaneseFlower japaneseFlower = (JapaneseFlower) iranianGardenBuilder.createFlower();
-        });
+        } catch (ClassCastException e){
+            System.out.println("Japanese flowers can't be created by an iranian garden creator");
+            return;
+        }catch (Exception e){
+
+        }
+        System.out.println("Third test: fail");
     }
 
+    @Test
     public void JapaneseGardenWithJapaneseTreesAndFlowers(){
-        JapaneseGardenBuilder japaneseGardenBuilder = new JapaneseGardenBuilder();
-        String expectedFlowerMessage = "Japanese flower created";
-        String expectedTreeMessage = "Japanese tree created";
+        JapaneseGardenCreator japaneseGardenBuilder = new JapaneseGardenCreator();
 
         JapaneseFlower japaneseFlower = (JapaneseFlower) japaneseGardenBuilder.createFlower();
-        String realFlowerMessage = japaneseFlower.getMessage();
-
         JapaneseTree japaneseTree = (JapaneseTree) japaneseGardenBuilder.createTree();
-        String realTreeMessage = japaneseTree.getMessage();
 
-        assertEquals(realFlowerMessage, expectedFlowerMessage);
-        assertEquals(realTreeMessage, expectedTreeMessage);
+        assertEquals("Japanese flower created", japaneseFlower.createFlowerResult());
+        assertEquals("Japanese tree created", japaneseTree.createTreeResult());
+
+        System.out.println("Forth test: pass");
     }
 
     @Test
     public void JapaneseGardenWithIranianTrees(){
-        JapaneseGardenBuilder japaneseGardenBuilder = new JapaneseGardenBuilder();
-        assertThrows(ClassCastException.class, () -> {
+        JapaneseGardenCreator japaneseGardenBuilder = new JapaneseGardenCreator();
+        try{
             IranianTree iranianTree = (IranianTree) japaneseGardenBuilder.createTree();
-        });
+        } catch (ClassCastException e){
+            System.out.println("Iranian trees can't be created by a japanese garden creator");
+            return;
+        }catch (Exception e){
+
+        }
+        System.out.println("Fifth test: fail");
     }
 
     @Test
     public void JapaneseGardenWithIranianFlowers(){
-        JapaneseGardenBuilder japaneseGardenBuilder = new JapaneseGardenBuilder();
-        assertThrows(ClassCastException.class, () -> {
+        JapaneseGardenCreator japaneseGardenBuilder = new JapaneseGardenCreator();
+        try{
             IranianFlower iranianFlower = (IranianFlower) japaneseGardenBuilder.createFlower();
-        });
+        } catch (ClassCastException e){
+            System.out.println("Iranian flowers can't be created by a japanese garden creator");
+            return;
+        }catch (Exception e){
+
+        }
+        System.out.println("sixth test: fail");
     }
 }

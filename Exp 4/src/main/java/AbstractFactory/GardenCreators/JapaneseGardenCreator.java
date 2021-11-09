@@ -5,7 +5,7 @@ import AbstractFactory.Flowers.JapaneseFlower;
 import AbstractFactory.Trees.JapaneseTree;
 import AbstractFactory.Trees.Tree;
 
-public class JapaneseGardenBuilder extends GardenBuilder{
+public class JapaneseGardenCreator extends GardenCreator {
     @Override
     public Flower createFlower() {
         return new JapaneseFlower();

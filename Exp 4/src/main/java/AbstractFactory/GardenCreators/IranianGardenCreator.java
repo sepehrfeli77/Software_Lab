@@ -5,7 +5,7 @@ import AbstractFactory.Flowers.IranianFlower;
 import AbstractFactory.Trees.IranianTree;
 import AbstractFactory.Trees.Tree;
 
-public class IranianGardenBuilder extends GardenBuilder {
+public class IranianGardenCreator extends GardenCreator {
 
     @Override
     public Flower createFlower() {
