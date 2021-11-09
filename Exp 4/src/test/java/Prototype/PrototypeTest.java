@@ -65,4 +65,17 @@ public class PrototypeTest {
         System.out.println("ProtoType Forth Test: Passed");
     }
 
+    @Test
+    public void CheckTwoCircleShape() {
+        Shape circle = new Circle();
+        circle.x = 10;
+        circle.y = 20;
+        circle.color = "red";
+        Circle anotherCircle = (Circle) circle.clone();
+
+        assertEquals(circle, anotherCircle);
+
+        System.out.println("ProtoType Fifth Test: Passed");
+    }
+
 }
