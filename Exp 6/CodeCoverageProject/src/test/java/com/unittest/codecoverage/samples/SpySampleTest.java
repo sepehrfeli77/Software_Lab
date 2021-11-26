@@ -15,31 +15,31 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class SpySampleTest {
-	
-	@Spy
-	List<String> spyList = new ArrayList<>();
 
-	@Test
-	@DisplayName("Verifies certain behavior happened at least once time.")
-	public void whenUsingTheSpyAnnotation_thenObjectIsSpied() {
-	    spyList.add("one");
-	    spyList.add("two");
+    @Spy
+    List<String> spyList = new ArrayList<>();
 
-	    Mockito.verify(spyList).add("one");
-	    Mockito.verify(spyList).add("two");
+    @Test
+    @DisplayName("Verifies certain behavior happened at least once time.")
+    public void whenUsingTheSpyAnnotation_thenObjectIsSpied() {
+        spyList.add("one");
+        spyList.add("two");
 
-	    assertEquals(2, spyList.size());
-	}
-	
-	@Test
-	@DisplayName("Verifies certain behavior happened at least two times.")
-	public void whenUsingTheSpyAnnotation_thenObjectIsSpiedMoreThanOneTime() {
-		spyList.add("one");
-		spyList.add("one");
+        Mockito.verify(spyList).add("one");
+        Mockito.verify(spyList).add("two");
 
-	    Mockito.verify(spyList, times(2)).add("one");
+        assertEquals(2, spyList.size());
+    }
 
-	    assertEquals(2, spyList.size());
-	}
+    @Test
+    @DisplayName("Verifies certain behavior happened at least two times.")
+    public void whenUsingTheSpyAnnotation_thenObjectIsSpiedMoreThanOneTime() {
+        spyList.add("one");
+        spyList.add("one");
+
+        Mockito.verify(spyList, times(2)).add("one");
+
+        assertEquals(2, spyList.size());
+    }
 
 }

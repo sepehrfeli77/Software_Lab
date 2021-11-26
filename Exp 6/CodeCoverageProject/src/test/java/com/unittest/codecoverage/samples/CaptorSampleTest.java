@@ -14,19 +14,19 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class CaptorSampleTest {
-	
-	@Mock
-	List<String> mockedList;
 
-	@Captor 
-	ArgumentCaptor<String> argCaptor;
+    @Mock
+    List<String> mockedList;
 
-	@Test
-	public void whenUseCaptorAnnotation_thenTheSame() {
-	    mockedList.add("one");
-	    verify(mockedList).add(argCaptor.capture());
+    @Captor
+    ArgumentCaptor<String> argCaptor;
 
-	    assertEquals("one", argCaptor.getValue());
-	}
+    @Test
+    public void whenUseCaptorAnnotation_thenTheSame() {
+        mockedList.add("one");
+        verify(mockedList).add(argCaptor.capture());
+
+        assertEquals("one", argCaptor.getValue());
+    }
 
 }

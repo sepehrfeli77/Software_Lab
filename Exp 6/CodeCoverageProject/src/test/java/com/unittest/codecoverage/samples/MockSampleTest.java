@@ -15,37 +15,37 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class MockSampleTest {
-	
-	@Test
-	public void shouldReturnFalse_whenAddSomeString() {
-		
-		MyCustomList listMock = mock(MyCustomList.class);
-		when(listMock.add(anyString())).thenReturn(false);
-		
-		assertFalse(listMock.add("something"));
-		
-	}
-	
-	@Test
-	public void shouldDoNothing_whenClear() {
-		
-		MyCustomList listMock = mock(MyCustomList.class);
-		doNothing().when(listMock).clear();
-		
-		listMock.clear();
-		
-	}
-	
-	@Test
-	public void shouldAnswerSomeString_whenGetItemByIndex() {
-		
-		MyCustomList listMock = mock(MyCustomList.class);
-		doAnswer(invocation -> {
-			return "Item";
-		}).when(listMock).get(anyInt());
-		
-		assertEquals("Item", listMock.get(0));
-		
-	}
+
+    @Test
+    public void shouldReturnFalse_whenAddSomeString() {
+
+        MyCustomList listMock = mock(MyCustomList.class);
+        when(listMock.add(anyString())).thenReturn(false);
+
+        assertFalse(listMock.add("something"));
+
+    }
+
+    @Test
+    public void shouldDoNothing_whenClear() {
+
+        MyCustomList listMock = mock(MyCustomList.class);
+        doNothing().when(listMock).clear();
+
+        listMock.clear();
+
+    }
+
+    @Test
+    public void shouldAnswerSomeString_whenGetItemByIndex() {
+
+        MyCustomList listMock = mock(MyCustomList.class);
+        doAnswer(invocation -> {
+            return "Item";
+        }).when(listMock).get(anyInt());
+
+        assertEquals("Item", listMock.get(0));
+
+    }
 
 }

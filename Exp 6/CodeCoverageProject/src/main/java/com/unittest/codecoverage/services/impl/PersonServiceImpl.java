@@ -11,42 +11,42 @@ import com.unittest.codecoverage.services.PersonService;
 
 @Service
 public class PersonServiceImpl implements PersonService {
-	
-	private PersonValidator validator;
-	@Autowired
-	private PersonRepository repository;
-	
-	@Autowired
-	public PersonServiceImpl() {
-		this.validator = new PersonValidator();
-	}
 
-	@Override
-	public Person insert(Person person) {
-		validator.validate(person);
-		return repository.insert(person);
-	}
+    private PersonValidator validator;
+    @Autowired
+    private PersonRepository repository;
 
-	@Override
-	public void update(Person person) {
-		validator.validate(person);
-		repository.update(person);
-	}
+    @Autowired
+    public PersonServiceImpl() {
+        this.validator = new PersonValidator();
+    }
 
-	@Override
-	public Person get(String name) {
-		if(validator.requiredName(name)) {
-			throw new PersonException("Name is required"); 
-		}
-		return repository.get(name);
-	}
+    @Override
+    public Person insert(Person person) {
+        validator.validate(person);
+        return repository.insert(person);
+    }
 
-	@Override
-	public void delete(String name) {
-		if(validator.requiredName(name)) {
-			throw new PersonException("Name is required"); 
-		}
-		repository.delete(name);
-	}
+    @Override
+    public void update(Person person) {
+        validator.validate(person);
+        repository.update(person);
+    }
+
+    @Override
+    public Person get(String name) {
+        if (validator.requiredName(name)) {
+            throw new PersonException("Name is required");
+        }
+        return repository.get(name);
+    }
+
+    @Override
+    public void delete(String name) {
+        if (validator.requiredName(name)) {
+            throw new PersonException("Name is required");
+        }
+        repository.delete(name);
+    }
 
 }

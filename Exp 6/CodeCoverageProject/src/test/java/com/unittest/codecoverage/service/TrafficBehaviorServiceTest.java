@@ -12,42 +12,42 @@ import com.unittest.codecoverage.services.TrafficBehaviorService;
 import com.unittest.codecoverage.services.impl.TrafficBehaviorServiceImpl;
 
 public class TrafficBehaviorServiceTest {
-	
-	private TrafficBehaviorService trafficBehaviorService = new TrafficBehaviorServiceImpl();
-	
-	@Test
-	public void testFootpassengerCrossTheStreet_shouldThrowBehaviorExceptionWhenFootpassengerCrossesTheRoadDuringHeavyTrafficAndWhileTheTrafficLightIsRed() {
-	
-		Traffic currentTrafic = new Traffic();
-		currentTrafic.setIntenseCarTraffic(true);
-		
-		Footpassenger currentFootpassengerBehavior = new Footpassenger();
-		currentFootpassengerBehavior.setCrossedTheRoad(true);
-		currentFootpassengerBehavior.setCrossedTrafficLigth(TrafficLigth.RED);
-		
-		Assertions.assertThatThrownBy(() -> trafficBehaviorService.footpassengerCrossTheStreet(currentTrafic, currentFootpassengerBehavior))
-			.isInstanceOf(BehaviorException.class)
-			.hasMessageContaining("You should'nt do that, reckless person");
-		
-	}
-	
-	@Test
-	@DisplayName("Should throw exception when footpassenger crosses the road during heavy traffic without attention")
-	public void testFootpassengerCrossTheStreet_shouldThrowBehaviorExceptionWhenFootpassengerCrossesTheRoadDuringHeavyTrafficWithoutLookSides() {
-	
-		Traffic currentTrafic = new Traffic();
-		currentTrafic.setIntenseCarTraffic(true);
-		
-		Footpassenger currentFootpassengerBehavior = new Footpassenger();
-		currentFootpassengerBehavior.setCrossedTheRoad(true);
-		currentFootpassengerBehavior.setCrossedTrafficLigth(TrafficLigth.GREEN);
-		currentFootpassengerBehavior.setLookedToTheLeft(false);
-		currentFootpassengerBehavior.setLookedToTheRight(false);
-		
-		Assertions.assertThatThrownBy(() -> trafficBehaviorService.footpassengerCrossTheStreet(currentTrafic, currentFootpassengerBehavior))
-			.isInstanceOf(BehaviorException.class)
-			.hasMessage("You should be more careful");
-		
-	}
+
+    private TrafficBehaviorService trafficBehaviorService = new TrafficBehaviorServiceImpl();
+
+    @Test
+    public void testFootpassengerCrossTheStreet_shouldThrowBehaviorExceptionWhenFootpassengerCrossesTheRoadDuringHeavyTrafficAndWhileTheTrafficLightIsRed() {
+
+        Traffic currentTrafic = new Traffic();
+        currentTrafic.setIntenseCarTraffic(true);
+
+        Footpassenger currentFootpassengerBehavior = new Footpassenger();
+        currentFootpassengerBehavior.setCrossedTheRoad(true);
+        currentFootpassengerBehavior.setCrossedTrafficLigth(TrafficLigth.RED);
+
+        Assertions.assertThatThrownBy(() -> trafficBehaviorService.footpassengerCrossTheStreet(currentTrafic, currentFootpassengerBehavior))
+                .isInstanceOf(BehaviorException.class)
+                .hasMessageContaining("You should'nt do that, reckless person");
+
+    }
+
+    @Test
+    @DisplayName("Should throw exception when footpassenger crosses the road during heavy traffic without attention")
+    public void testFootpassengerCrossTheStreet_shouldThrowBehaviorExceptionWhenFootpassengerCrossesTheRoadDuringHeavyTrafficWithoutLookSides() {
+
+        Traffic currentTrafic = new Traffic();
+        currentTrafic.setIntenseCarTraffic(true);
+
+        Footpassenger currentFootpassengerBehavior = new Footpassenger();
+        currentFootpassengerBehavior.setCrossedTheRoad(true);
+        currentFootpassengerBehavior.setCrossedTrafficLigth(TrafficLigth.GREEN);
+        currentFootpassengerBehavior.setLookedToTheLeft(false);
+        currentFootpassengerBehavior.setLookedToTheRight(false);
+
+        Assertions.assertThatThrownBy(() -> trafficBehaviorService.footpassengerCrossTheStreet(currentTrafic, currentFootpassengerBehavior))
+                .isInstanceOf(BehaviorException.class)
+                .hasMessage("You should be more careful");
+
+    }
 
 }
