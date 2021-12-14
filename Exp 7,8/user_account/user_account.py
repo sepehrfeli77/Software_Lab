@@ -14,7 +14,7 @@ def setup_db():
     db.create_all()
 
 @app.route('/create_doctor', methods=['POST'])
-def create_user():
+def create_doctor():
     data = request.json
 
     doctor = Doctor(name=data.get('name'),
@@ -23,6 +23,25 @@ def create_user():
 
     try:
         db.session.add(doctor)
+        db.session.commit()
+        return {'message': 'Success'}, HTTPStatus.CREATED
+
+    except IntegrityError as e:
+        if 'UNIQUE' in str(e):
+            return {'message': 'Error: national id already exists'}, HTTPStatus.CONFLICT
+        else:
+            return {'message': 'Error: bad request error'}, HTTPStatus.BAD_REQUEST
+
+@app.route('/create_patient', methods=['POST'])
+def create_patient():
+    data = request.json
+
+    patient = Patient(name=data.get('name'),
+                password=data.get('password'),
+                national_id=data.get('national_id'))
+
+    try:
+        db.session.add(patient)
         db.session.commit()
         return {'message': 'Success'}, HTTPStatus.CREATED
 

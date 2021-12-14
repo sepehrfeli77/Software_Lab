@@ -23,6 +23,12 @@ def doctor_signup():
     response = requests.post(f"{account_service.url}/create_doctor", json=json)
     return response.content, response.status_code, response.headers.items()
 
+@app.route('/doctor/sign_up/', methods=['POST'])
+def patient_signup():
+    json = request.json
+    response = requests.post(f"{account_service.url}/create_patient", json=json)
+    return response.content, response.status_code, response.headers.items()
+
 @app.route('/admin/sign_up/', methods=['POST'])
 def admin_signup():
     json = request.json
