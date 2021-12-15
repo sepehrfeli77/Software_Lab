@@ -16,9 +16,6 @@ app = Flask(__name__)
 account_service = Service("Account Service", "127.0.0.1", 8003)
 app.config['SECRET_KEY'] = 'Private_Key'
 
-
-
-
 @app.route('/doctor/sign_up/', methods=['POST'])
 def doctor_signup():
     json = request.json
@@ -46,14 +43,33 @@ def doctor_login():
 @app.route('/patient/sign_in', methods=['POST'])
 def patient_login():
     json = request.json
-    response = requests.post(f"{account_service.url}/login_patient", json=json)
+    response = requests.post(f"{account_service.url}/login/patient", json=json)
     return response.content, response.status_code, response.headers.items()
 
 @app.route('/admin/sign_in', methods=['POST'])
 def admin_login():
     json = request.json
-    response = requests.post(f"{account_service.url}/login_admin", json=json)
+    response = requests.post(f"{account_service.url}/login/admin", json=json)
     return response.content, response.status_code, response.headers.items()
+
+@app.route('/doctor/show_profile', methods=['GET'])
+def doctor_show_profile():
+    json = request.json
+    response = requests.get(f"{account_service.url}/doctor/show_profile", json=json, headers=request.headers)
+    return response.content, response.status_code, response.headers.items()
+
+@app.route('/doctors', methods=['GET'])
+def show_doctors():
+    json = request.json
+    response = requests.get(f"{account_service.url}/admin/show_doctors", json=json, headers=request.headers)
+    return response.content, response.status_code, response.headers.items()
+
+@app.route('/patients', methods=['GET'])
+def show_patients():
+    json = request.json
+    response = requests.get(f"{account_service.url}/admin/show_patients", json=json, headers=request.headers)
+    return response.content, response.status_code, response.headers.items()
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8001)

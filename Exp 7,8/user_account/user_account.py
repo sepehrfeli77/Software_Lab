@@ -104,7 +104,6 @@ def doctor_login(national_id):
     else:
         return {'message': 'Password is wrong'}, HTTPStatus.FORBIDDEN
 
-
 @app.route('/login/admin', methods=['POST'])
 def admin_login():
     admin = Admin.query.all()[0]
@@ -122,13 +121,14 @@ def admin_login():
     else:
         return {'message': 'Password is wrong'}, HTTPStatus.FORBIDDEN
 
-@app.route('/doctor/show_profile/<national_id>', methods=['GET'])
+@app.route('/doctor/show_profile', methods=['GET'])
 @token_required
-def show_doctor_profile(national_id):
+def show_doctor_profile():
     token = request.headers.get('token')
     data = jwt.decode(token, app.config['SECRET_KEY'])
-    if data["doctor"] == national_id:
-        doctor = Doctor.query.filter_by(national_id=national_id).first()
+    national_id = data['doctor']
+    doctor = Doctor.query.filter_by(national_id=national_id).first()
+    if doctor is not None:
         return jsonify(doctor.to_dict())
     else:
         return jsonify({"message":"Invalid access"})
@@ -139,6 +139,8 @@ def show_doctors():
     token = request.headers.get('token')
     data = jwt.decode(token, app.config['SECRET_KEY'])
     admin = Admin.query.all()[0]
+    if data.get("admin") is None:
+        return jsonify({"message":"You are not admin"})
     if data["admin"] == admin.name:
         return jsonify([u.to_dict() for u in Doctor.query.all()])
     else:
@@ -150,6 +152,8 @@ def show_patients():
     token = request.headers.get('token')
     data = jwt.decode(token, app.config['SECRET_KEY'])
     admin = Admin.query.all()[0]
+    if data.get("admin") is None:
+        return jsonify({"message":"You are not admin"})
     if data["admin"] == admin.name:
         return jsonify([u.to_dict() for u in Patient.query.all()])
     else:
