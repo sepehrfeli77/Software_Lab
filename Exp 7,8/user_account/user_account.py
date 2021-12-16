@@ -4,7 +4,10 @@ from datetime import datetime, timedelta
 from functools import wraps
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
+
 from models import *
+#from user_account.models import *
+
 from flask.json import jsonify
 from sqlalchemy.exc import IntegrityError
 from http import HTTPStatus
@@ -13,8 +16,9 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///clinic.sqlite3'
 app.config['SECRET_KEY'] = 'Private_Key'
 
+
 def token_required(func):
-    # decorator factory which invoks update_wrapper() method and passes decorated function as an argument
+    # decorator factory which invokes update_wrapper() method and passes decorated function as an argument
     @wraps(func)
     def decorated(*args, **kwargs):
         token = request.headers.get('token')
@@ -27,10 +31,12 @@ def token_required(func):
         return func(*args, **kwargs)
     return decorated
 
+
 @app.before_first_request
 def setup_db():
     db.init_app(app)
     db.create_all()
+
 
 @app.route('/create_doctor', methods=['POST'])
 def create_doctor():
@@ -51,6 +57,7 @@ def create_doctor():
         else:
             return {'message': 'Error: bad request error'}, HTTPStatus.BAD_REQUEST
 
+
 @app.route('/create_patient', methods=['POST'])
 def create_patient():
     data = request.json
@@ -70,6 +77,7 @@ def create_patient():
         else:
             return {'message': 'Error: bad request error'}, HTTPStatus.BAD_REQUEST
 
+
 @app.route('/create_admin', methods=['POST'])
 def create_admin():
     data = request.json
@@ -86,6 +94,7 @@ def create_admin():
             return {'message': 'Error: bad request error'}, HTTPStatus.BAD_REQUEST
     else:
         return {'message': 'System already has an admin'}, HTTPStatus.FORBIDDEN
+
 
 @app.route('/login/doctor/<national_id>', methods=['POST'])
 def doctor_login(national_id):
@@ -104,6 +113,7 @@ def doctor_login(national_id):
     else:
         return {'message': 'Password is wrong'}, HTTPStatus.FORBIDDEN
 
+
 @app.route('/login/admin', methods=['POST'])
 def admin_login():
     admin = Admin.query.all()[0]
@@ -121,6 +131,7 @@ def admin_login():
     else:
         return {'message': 'Password is wrong'}, HTTPStatus.FORBIDDEN
 
+
 @app.route('/doctor/show_profile', methods=['GET'])
 @token_required
 def show_doctor_profile():
@@ -132,6 +143,7 @@ def show_doctor_profile():
         return jsonify(doctor.to_dict())
     else:
         return jsonify({"message":"Invalid access"})
+
 
 @app.route('/admin/show_doctors', methods=['GET'])
 @token_required
@@ -146,6 +158,7 @@ def show_doctors():
     else:
         return jsonify({"message":"Invalid access"})
 
+
 @app.route('/admin/show_patients', methods=['GET'])
 @token_required
 def show_patients():
@@ -158,6 +171,62 @@ def show_patients():
         return jsonify([u.to_dict() for u in Patient.query.all()])
     else:
         return jsonify({"message":"Invalid access"})
+
+
+@app.route('/doctor/indication', methods=['POST'])
+def indication():
+    data = request.json
+
+    doctor = Doctor.query.filter_by(national_id=data.get('doctor')).first().to_dict()
+    if doctor is None:
+        return {'message': 'Error: No such doctor'}, HTTPStatus.NOT_FOUND
+    patient = Patient.query.filter_by(national_id=data.get('patient')).first().to_dict()
+    if patient is None:
+        return {'message': 'Error: No such patient'}, HTTPStatus.NOT_FOUND
+
+    prescription = Prescription(
+        doctor_id=doctor.get('id'),
+        patient_id=patient.get('id'),
+#        drugs=data.get('drugs'),
+        comment=data.get('comment'))
+
+    try:
+        db.session.add(prescription)
+        db.session.commit()
+        return {'message': 'Success'}, HTTPStatus.CREATED
+
+    except IntegrityError as e:
+        return {'message': 'Request Rejected'}
+
+
+@app.route('/doctor/prescriptions', methods=['POST'])
+def dr_prescriptions():
+    data = request.json
+
+    doctor = Doctor.query.filter_by(national_id=data.get('doctor')).first().to_dict()
+    if doctor is None:
+        return {'message': 'Error: No such doctor'}, HTTPStatus.NOT_FOUND
+
+    prescriptions = Prescription.query.filter_by(doctor_id=doctor['id']).all()
+    if len(prescriptions) == 0:
+        return {'message': 'No prescription'}, HTTPStatus.NOT_FOUND
+
+    return jsonify([prescriptions[i].to_dict() for i in range(len(prescriptions))])
+
+
+@app.route('/patient/prescriptions', methods=['POST'])
+def p_prescriptions():
+    data = request.json
+
+    patient = Patient.query.filter_by(national_id=data.get('patient')).first().to_dict()
+    if patient is None:
+        return {'message': 'Error: No such patient'}, HTTPStatus.NOT_FOUND
+
+    prescriptions = Prescription.query.filter_by(patient_id=patient['id']).all()
+    if len(prescriptions) == 0:
+        return {'message': 'No prescription'}, HTTPStatus.NOT_FOUND
+
+    return jsonify([prescriptions[i].to_dict() for i in range(len(prescriptions))])
 
 
 if __name__ == "__main__":
