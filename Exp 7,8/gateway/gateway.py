@@ -103,5 +103,11 @@ def patient_prescriptions():
     return response.content, response.status_code, response.headers.items()
 
 
+@app.route('/admin/prescription/list', methods=['POST'])
+def admin_prescriptions():
+    json = request.json
+    response = requests.post(f"{account_service.url}/admin/prescriptions", json=json)
+    return response.content, response.status_code, response.headers.items()
+
 if __name__ == '__main__':
     app.run(debug=True, port=8001)

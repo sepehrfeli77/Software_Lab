@@ -229,5 +229,15 @@ def p_prescriptions():
     return jsonify([prescriptions[i].to_dict() for i in range(len(prescriptions))])
 
 
+@app.route('/admin/prescriptions', methods=['POST'])
+def a_prescriptions():
+    data = request.json
+
+    prescriptions = Prescription.query.all()
+    if len(prescriptions) == 0:
+        return {'message': 'No prescription'}, HTTPStatus.NOT_FOUND
+
+    return jsonify([prescriptions[i].to_dict() for i in range(len(prescriptions))])
+
 if __name__ == "__main__":
     app.run(debug=True, port=8003)
