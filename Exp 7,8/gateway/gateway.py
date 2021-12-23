@@ -2,6 +2,7 @@ import requests
 from flask import Flask, request
 from flask.json import jsonify
 from requests.models import Response
+from flasgger import Swagger
 
 
 class Service:
@@ -18,9 +19,48 @@ app = Flask(__name__)
 account_service = Service("Account Service", "127.0.0.1", 8003)
 app.config['SECRET_KEY'] = 'Private_Key'
 
+SWAGGER_TEMPLATE = {
+    "securityDefinitions": {"APIKeyHeader": {"type": "API Key", "name": "token", "in": "header"}}}
+app.config['SWAGGER'] = {
+    'title': 'API Document'
+}
+swagger = Swagger(app, template=SWAGGER_TEMPLATE)
+
 
 @app.route('/doctor/sign_up/', methods=['POST'])
 def doctor_signup():
+    """signup doctor
+    This is using docstrings for specifications.
+    ---
+      tags:
+        - doctors
+      parameters:
+        - in: body
+          name: doctor
+          description: Add new doctor to the system.
+          schema:
+            type: object
+            required:
+              - national_id
+            required:
+              - password
+            required:
+              - name
+            properties:
+              national_id:
+                type: string
+              password:
+                type: string
+              name:
+                type: string
+      responses:
+        201:
+          description: user created
+        409:
+          description: user already exists
+        400:
+          description: Bad request
+    """
     json = request.json
     response = requests.post(f"{account_service.url}/create_doctor", json=json)
     return response.content, response.status_code, response.headers.items()

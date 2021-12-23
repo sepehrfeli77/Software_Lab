@@ -13,7 +13,7 @@ from sqlalchemy.exc import IntegrityError
 from http import HTTPStatus
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///clinic.sqlite3'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///clinic.db'
 app.config['SECRET_KEY'] = 'Private_Key'
 
 
