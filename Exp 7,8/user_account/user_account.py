@@ -21,6 +21,7 @@ def token_required(func):
     # decorator factory which invokes update_wrapper() method and passes decorated function as an argument
     @wraps(func)
     def decorated(*args, **kwargs):
+        print(request.headers)
         token = request.headers.get('token')
         if not token:
             return jsonify({'Alert!': 'Token is missing!'}), 401
@@ -161,7 +162,10 @@ def admin_login():
 def show_doctor_profile():
     token = request.headers.get('token')
     data = jwt.decode(token, app.config['SECRET_KEY'])
-    national_id = data['doctor']
+    try:
+        national_id = data['doctor']
+    except:
+        return jsonify({"message":"Invalid access"})
     doctor = Doctor.query.filter_by(national_id=national_id).first()
     if doctor is not None:
         return jsonify(doctor.to_dict())
@@ -173,7 +177,10 @@ def show_doctor_profile():
 def show_patient_profile():
     token = request.headers.get('token')
     data = jwt.decode(token, app.config['SECRET_KEY'])
-    national_id = data['patient']
+    try:
+        national_id = data['patient']
+    except:
+        return jsonify({"message":"Invalid access"})
     patient = Patient.query.filter_by(national_id=national_id).first()
     if patient is not None:
         return jsonify(patient.to_dict())

@@ -2,7 +2,7 @@ import requests
 from flask import Flask, request
 from flask.json import jsonify
 from requests.models import Response
-from flasgger import Swagger
+from flask_swagger_ui import get_swaggerui_blueprint
 
 
 class Service:
@@ -19,61 +19,33 @@ app = Flask(__name__)
 account_service = Service("Account Service", "127.0.0.1", 8003)
 app.config['SECRET_KEY'] = 'Private_Key'
 
-SWAGGER_TEMPLATE = {
-    "securityDefinitions": {"APIKeyHeader": {"type": "API Key", "name": "token", "in": "header"}}}
-app.config['SWAGGER'] = {
-    'title': 'API Document'
-}
-swagger = Swagger(app, template=SWAGGER_TEMPLATE)
+SWAGGER_URL = '/swagger'
+API_URL = '/static/swagger.json'
+SWAGGER_BLUEPRINT = get_swaggerui_blueprint(
+  SWAGGER_URL,
+  API_URL,
+  config={
+    'app_name':'API Document for EXP 7,8'
+  }
+)
+app.register_blueprint(SWAGGER_BLUEPRINT, url_prefix=SWAGGER_URL)
 
 
-@app.route('/doctor/sign_up/', methods=['POST'])
+@app.route('/doctor/sign_up', methods=['POST'])
 def doctor_signup():
-    """signup doctor
-    This is using docstrings for specifications.
-    ---
-      tags:
-        - doctors
-      parameters:
-        - in: body
-          name: doctor
-          description: Add new doctor to the system.
-          schema:
-            type: object
-            required:
-              - national_id
-            required:
-              - password
-            required:
-              - name
-            properties:
-              national_id:
-                type: string
-              password:
-                type: string
-              name:
-                type: string
-      responses:
-        201:
-          description: user created
-        409:
-          description: user already exists
-        400:
-          description: Bad request
-    """
     json = request.json
     response = requests.post(f"{account_service.url}/create_doctor", json=json)
     return response.content, response.status_code, response.headers.items()
 
 
-@app.route('/patient/sign_up/', methods=['POST'])
+@app.route('/patient/sign_up', methods=['POST'])
 def patient_signup():
     json = request.json
     response = requests.post(f"{account_service.url}/create_patient", json=json)
     return response.content, response.status_code, response.headers.items()
 
 
-@app.route('/admin/sign_up/', methods=['POST'])
+@app.route('/admin/sign_up', methods=['POST'])
 def admin_signup():
     json = request.json
     response = requests.post(f"{account_service.url}/create_admin", json=json)
@@ -128,7 +100,7 @@ def show_patients():
     return response.content, response.status_code, response.headers.items()
 
 @app.route('/prescriptions', methods=['GET'])
-def show_priscriptions():
+def show_prescriptions():
     json = request.json
     response = requests.get(f"{account_service.url}/admin/show_prescriptions", json=json, headers=request.headers)
     return response.content, response.status_code, response.headers.items()
@@ -137,34 +109,34 @@ def show_priscriptions():
 @app.route('/doctor/prescription/indicate', methods=['POST'])
 def indicate_prescription():
     json = request.json
-    response = requests.post(f"{account_service.url}/doctor/indication", json=json)
+    response = requests.post(f"{account_service.url}/doctor/indication", json=json, headers=request.headers)
     return response.content, response.status_code, response.headers.items()
 
 
 @app.route('/doctor/prescription/list', methods=['GET'])
 def doctor_prescriptions():
     json = request.json
-    response = requests.get(f"{account_service.url}/doctor/prescriptions", json=json)
+    response = requests.get(f"{account_service.url}/doctor/prescriptions", json=json, headers=request.headers)
     return response.content, response.status_code, response.headers.items()
 
 
 @app.route('/patient/prescription/list', methods=['GET'])
 def patient_prescriptions():
     json = request.json
-    response = requests.get(f"{account_service.url}/patient/prescriptions", json=json)
+    response = requests.get(f"{account_service.url}/patient/prescriptions", json=json, headers=request.headers)
     return response.content, response.status_code, response.headers.items()
 
 
 @app.route('/admin/prescription/list', methods=['GET'])
 def admin_prescriptions():
     json = request.json
-    response = requests.get(f"{account_service.url}/admin/prescriptions", json=json)
+    response = requests.get(f"{account_service.url}/admin/prescriptions", json=json, headers=request.headers)
     return response.content, response.status_code, response.headers.items()
 
 @app.route('/admin/stat', methods=['GET'])
 def admin_stat():
     json = request.json
-    response = requests.get(f"{account_service.url}/admin/statistics/daily", json=json)
+    response = requests.get(f"{account_service.url}/admin/statistics/daily", json=json, headers=request.headers)
     return response.content, response.status_code, response.headers.items()
 
 

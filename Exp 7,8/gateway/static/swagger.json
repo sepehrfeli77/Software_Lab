@@ -1,0 +1,608 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "description": "This document was prepared for testing the APIS",
+        "version": "1.0.0",
+        "title": "API Document for EXP 7,8",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "tags": [
+        {
+            "name": "Sign Up API",
+            "description": "Test Sign Up API"
+        },
+        {
+            "name": "Sign In API",
+            "description": "Test Sign In API"
+        },
+        {
+            "name": "Show Doctors And Patients And Prescriptions",
+            "description": "Admin Can See Doctors And Patients and Prescriptions In System"
+        },
+        {
+            "name": "Profile",
+            "description": "Each Users Can See Profile"
+        },
+        {
+            "name": "Statistics",
+            "description": "Daily Statistics"
+        },
+        {
+            "name": "Doctor And Patient Prescriptions",
+            "description": "List Of Prescription Belong To Doctor and Patient"
+        },
+        {
+            "name": "Doctor Indications",
+            "description": "Doctor Indicate Prescription"
+        }
+    ],
+    "servers": [
+        {
+            "url": "/"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "ApiKeyHeader": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "token"
+            }
+        },
+        "schemas": {
+            "Create_User": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "national_id": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Create_Admin": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Admin": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "password": {
+                        "type": "string"
+                    },
+                    "national_id": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Prescription": {
+                "type": "object",
+                "properties": {
+                    "doctor": {
+                        "type": "string"
+                    },
+                    "patient": {
+                        "type": "string"
+                    },
+                    "drugs": {
+                        "type": "string"
+                    },
+                    "comment": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "security": {
+            "ApiKeyHeader": []
+        }
+    },
+    "paths": {
+        "/doctor/sign_up": {
+            "post": {
+                "tags": [
+                    "Sign Up API"
+                ],
+                "summary": "Add New Doctor",
+                "requestBody": {
+                    "description": "Post New Doctor To Database",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Create_User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/Create_User"
+                        }
+                    },
+                    "409": {
+                        "description": "National ID Must Be Unique",
+                        "schema": {
+                            "$ref": "#/components/schemas/Create_User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request Error",
+                        "schema": {
+                            "$ref": "#/components/schemas/Create_User"
+                        }
+                    }
+                }
+            }
+        },
+        "/patient/sign_up": {
+            "post": {
+                "tags": [
+                    "Sign Up API"
+                ],
+                "summary": "Add New Patient",
+                "requestBody": {
+                    "description": "Post New Patient To Database",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Create_User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/Create_User"
+                        }
+                    },
+                    "409": {
+                        "description": "National ID Must Be Unique",
+                        "schema": {
+                            "$ref": "#/components/schemas/Create_User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request Error",
+                        "schema": {
+                            "$ref": "#/components/schemas/Create_User"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/sign_up": {
+            "post": {
+                "tags": [
+                    "Sign Up API"
+                ],
+                "summary": "Add New Admin",
+                "requestBody": {
+                    "description": "Post New Admin To Database",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Create_Admin"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/Create_Admin"
+                        }
+                    },
+                    "403": {
+                        "description": "Admin Already Exists And System Just Has One Admin",
+                        "schema": {
+                            "$ref": "#/components/schemas/Create_Admin"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request Error",
+                        "schema": {
+                            "$ref": "#/components/schemas/Create_Admin"
+                        }
+                    }
+                }
+            }
+        },
+        "/doctor/sign_in": {
+            "post": {
+                "tags": [
+                    "Sign In API"
+                ],
+                "summary": "Login Doctor",
+                "requestBody": {
+                    "description": "Authenticate Doctor",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "403": {
+                        "description": "Password is incorrect",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/patient/sign_in": {
+            "post": {
+                "tags": [
+                    "Sign In API"
+                ],
+                "summary": "Login Patient",
+                "requestBody": {
+                    "description": "Authenticate Patient",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "403": {
+                        "description": "Password is incorrect",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/sign_in": {
+            "post": {
+                "tags": [
+                    "Sign In API"
+                ],
+                "summary": "Login Admin",
+                "requestBody": {
+                    "description": "Authenticate Admin",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Admin"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/Admin"
+                        }
+                    },
+                    "403": {
+                        "description": "Password is incorrect",
+                        "schema": {
+                            "$ref": "#/components/schemas/Admin"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/components/schemas/Admin"
+                        }
+                    }
+                }
+            }
+        },
+        "/doctors": {
+            "get": {
+                "tags": [
+                    "Show Doctors And Patients And Prescriptions"
+                ],
+                "summary": "Show All Doctors",
+                "security": [
+                    {
+                        "ApiKeyHeader": [
+                            "token"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/Create_User"
+                        }
+                    }
+                }
+            }
+        },
+        "/patients": {
+            "get": {
+                "tags": [
+                    "Show Doctors And Patients And Prescriptions"
+                ],
+                "summary": "Show All Patients",
+                "security": [
+                    {
+                        "ApiKeyHeader": [
+                            "token"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/prescriptions": {
+            "get": {
+                "tags": [
+                    "Show Doctors And Patients And Prescriptions"
+                ],
+                "summary": "Show All Prescriptions",
+                "security": [
+                    {
+                        "ApiKeyHeader": [
+                            "token"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/Prescription"
+                        }
+                    }
+                }
+            }
+        },
+        "/doctor/prescription/indicate": {
+            "post": {
+                "tags": [
+                    "Doctor Indications"
+                ],
+                "summary": "Doctor Indications",
+                "security": [
+                    {
+                        "ApiKeyHeader": [
+                            "token"
+                        ]
+                    }
+                ],
+                "requestBody": {
+                    "description": "Doctor Indications",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Prescription"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/Prescription"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/components/schemas/Prescription"
+                        }
+                    }
+                }
+            }
+        },
+        "/doctor/show_profile": {
+            "get": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Show Doctor Profile",
+                "security": [
+                    {
+                        "ApiKeyHeader": [
+                            "token"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/Create_User"
+                        }
+                    }
+                }
+            }
+        },
+        "/patient/show_profile": {
+            "get": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Show Patient Profile",
+                "security": [
+                    {
+                        "ApiKeyHeader": [
+                            "token"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/Create_User"
+                        }
+                    }
+                }
+            }
+        },
+        "/doctor/prescription/list": {
+            "get": {
+                "tags": [
+                    "Doctor And Patient Prescriptions"
+                ],
+                "summary": "List Of Prescriptions",
+                "security": [
+                    {
+                        "ApiKeyHeader": [
+                            "token"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/Prescription"
+                        }
+                    }
+                }
+            }
+        },
+        "/patient/prescription/list": {
+            "get": {
+                "tags": [
+                    "Doctor And Patient Prescriptions"
+                ],
+                "summary": "List Of Prescriptions",
+                "security": [
+                    {
+                        "ApiKeyHeader": [
+                            "token"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/Prescription"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/prescription/list": {
+            "get": {
+                "tags": [
+                    "Doctor And Patient Prescriptions"
+                ],
+                "summary": "List Of Prescriptions",
+                "security": [
+                    {
+                        "ApiKeyHeader": [
+                            "token"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/Prescription"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/stat": {
+            "get": {
+                "tags": [
+                    "Statistics"
+                ],
+                "summary": "Daily Statistics",
+                "security": [
+                    {
+                        "ApiKeyHeader": [
+                            "token"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/Create_User"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
