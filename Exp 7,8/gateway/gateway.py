@@ -43,7 +43,7 @@ def admin_signup():
 @app.route('/doctor/sign_in', methods=['POST'])
 def doctor_login():
     json = request.json
-    response = requests.post(f"{account_service.url}/login/doctor/{json.get('national_id')}", json=json)
+    response = requests.post(f"{account_service.url}/login/doctor", json=json)
     return response.content, response.status_code, response.headers.items()
 
 
@@ -67,6 +67,12 @@ def doctor_show_profile():
     response = requests.get(f"{account_service.url}/doctor/show_profile", json=json, headers=request.headers)
     return response.content, response.status_code, response.headers.items()
 
+@app.route('/patient/show_profile', methods=['GET'])
+def patient_show_profile():
+    json = request.json
+    response = requests.get(f"{account_service.url}/patient/show_profile", json=json, headers=request.headers)
+    return response.content, response.status_code, response.headers.items()
+
 
 @app.route('/doctors', methods=['GET'])
 def show_doctors():
@@ -81,6 +87,12 @@ def show_patients():
     response = requests.get(f"{account_service.url}/admin/show_patients", json=json, headers=request.headers)
     return response.content, response.status_code, response.headers.items()
 
+@app.route('/prescriptions', methods=['GET'])
+def show_priscriptions():
+    json = request.json
+    response = requests.get(f"{account_service.url}/admin/show_prescriptions", json=json, headers=request.headers)
+    return response.content, response.status_code, response.headers.items()
+
 
 @app.route('/doctor/prescription/indicate', methods=['POST'])
 def indicate_prescription():
@@ -89,25 +101,32 @@ def indicate_prescription():
     return response.content, response.status_code, response.headers.items()
 
 
-@app.route('/doctor/prescription/list', methods=['POST'])
+@app.route('/doctor/prescription/list', methods=['GET'])
 def doctor_prescriptions():
     json = request.json
-    response = requests.post(f"{account_service.url}/doctor/prescriptions", json=json)
+    response = requests.get(f"{account_service.url}/doctor/prescriptions", json=json)
     return response.content, response.status_code, response.headers.items()
 
 
-@app.route('/patient/prescription/list', methods=['POST'])
+@app.route('/patient/prescription/list', methods=['GET'])
 def patient_prescriptions():
     json = request.json
-    response = requests.post(f"{account_service.url}/patient/prescriptions", json=json)
+    response = requests.get(f"{account_service.url}/patient/prescriptions", json=json)
     return response.content, response.status_code, response.headers.items()
 
 
-@app.route('/admin/prescription/list', methods=['POST'])
+@app.route('/admin/prescription/list', methods=['GET'])
 def admin_prescriptions():
     json = request.json
-    response = requests.post(f"{account_service.url}/admin/prescriptions", json=json)
+    response = requests.get(f"{account_service.url}/admin/prescriptions", json=json)
     return response.content, response.status_code, response.headers.items()
+
+@app.route('/admin/stat', methods=['GET'])
+def admin_stat():
+    json = request.json
+    response = requests.get(f"{account_service.url}/admin/statistics/daily", json=json)
+    return response.content, response.status_code, response.headers.items()
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8001)

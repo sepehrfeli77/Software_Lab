@@ -1,4 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+from sqlalchemy.sql import func
+
 db = SQLAlchemy()
 
 
@@ -21,6 +24,7 @@ class Doctor(db.Model):
     name = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(50), nullable=False)
     prescriptions = db.relationship('Prescription', backref='doctor')
+    create_time = db.Column(db.DateTime(timezone=True), default=func.now())
 
     def to_dict(self):
         vals = vars(self)
@@ -36,6 +40,7 @@ class Patient(db.Model):
     name = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(50), nullable=False)
     prescriptions = db.relationship('Prescription', backref='patient')
+    create_time = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
 
     def to_dict(self):
         vals = vars(self)
@@ -49,8 +54,9 @@ class Prescription(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     doctor_id = db.Column(db.Integer, db.ForeignKey('doctor.id'))
     patient_id = db.Column(db.Integer, db.ForeignKey('patient.id'))
-    #drugs = db.Column(db.String(100), nullable=False)
+    drugs = db.Column(db.String(100), nullable=False)
     comment = db.Column(db.String(50), nullable=True)
+    create_time = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
 
     def to_dict(self):
         vals = vars(self)
